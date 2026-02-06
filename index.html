@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CBS Web Haritası</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+  <!-- App CSS -->
+  <link rel="stylesheet" href="./style.css"/>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-dot"></div>
+        <div>
+          <div class="brand-title">CBS Web Map</div>
+          <div class="brand-sub">Leaflet tabanlı</div>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="layers">Katmanlar</button>
+        <button class="tab" data-tab="basemaps">Altlık</button>
+        <button class="tab" data-tab="import">İçe Aktar</button>
+      </div>
+
+      <section class="panel active" id="tab-layers">
+        <div class="panel-title">Katmanlar</div>
+
+        <div class="group-create">
+          <input id="newGroupName" type="text" placeholder="Yeni grup adı"/>
+          <button id="addGroupBtn" class="btn primary">Grup Ekle</button>
+        </div>
+
+        <div id="groupList" class="group-list"></div>
+
+        <div class="hint">
+          Katmanları aç/kapatabilir, grupları yönetebilir, tek menüden stil/düzenleme/öznitelik tablosu gibi işlemleri seçebilirsin.
+        </div>
+      </section>
+
+      <section class="panel" id="tab-basemaps">
+        <div class="panel-title">Altlık Harita</div>
+        <div class="radio-list">
+          <label><input type="radio" name="basemap" value="osm" checked> OpenStreetMap</label>
+          <label><input type="radio" name="basemap" value="cartoLight"> Carto Light</label>
+          <label><input type="radio" name="basemap" value="esriSat"> Esri Satellite</label>
+        </div>
+        <div class="hint">Altlık haritayı buradan değiştir.</div>
+      </section>
+
+      <section class="panel" id="tab-import">
+        <div class="panel-title">Veri İçe Aktar</div>
+
+        <div class="box">
+          <div class="box-title">GeoJSON</div>
+          <input type="file" id="geojsonFile" accept=".geojson,.json"/>
+          <div class="mini">.geojson / .json</div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">Shapefile (ZIP)</div>
+          <input type="file" id="shpZipFile" accept=".zip"/>
+          <div class="mini">.zip içinde .shp .shx .dbf .prj olmalı</div>
+        </div>
+
+        <div class="hint">
+          İçe aktardığın katmanlar “Katmanlar” listesine gelir.
+          <br/>Kalıcı katmanlar <b>data/layers.json</b> ile yönetilir.
+        </div>
+      </section>
+    </aside>
+
+    <main class="mapwrap">
+      <div id="map"></div>
+
+      <div class="toolbar">
+        <button id="zoomToAll" class="toolbtn">Tüm Katmanlara Git</button>
+        <button id="clearImports" class="toolbtn danger">İçe Aktarılanları Temizle</button>
+
+        <!-- Tek ikon: Araçlar / Toolbox -->
+        <button id="toolsBtn" class="iconbtn" title="Araçlar">🧰</button>
+      </div>
+
+      <!-- QGIS-like Toolbox panel -->
+      <div id="toolbox" class="toolbox hidden">
+        <div class="toolbox-head">
+          <div class="toolbox-title">Araçlar</div>
+          <button id="toolboxClose" class="xbtn" title="Kapat">×</button>
+        </div>
+        <div class="toolbox-body" id="toolboxBody">
+          <!-- app.js dolduracak -->
+        </div>
+        <div class="toolbox-foot">
+          <div class="toolbox-status" id="toolStatus">Hazır</div>
+        </div>
+      </div>
+
+      <!-- Style modal (line/fill/opacity/weight/dash) -->
+      <div id="styleModal" class="modal hidden">
+        <div class="modal-card">
+          <div class="modal-head">
+            <div>
+              <div class="modal-title" id="styleTitle">Stil</div>
+              <div class="modal-sub">Çizgi / dolgu / çizgi tipi</div>
+            </div>
+            <button id="styleClose" class="xbtn" title="Kapat">×</button>
+          </div>
+
+          <div class="modal-body">
+            <div class="formrow">
+              <div class="label">Dış çizgi rengi</div>
+              <div class="row2">
+                <input id="lineColor" type="color" />
+              </div>
+            </div>
+
+            <div class="formrow">
+              <div class="label">Dolgu rengi</div>
+              <div class="row2">
+                <input id="fillColor" type="color" />
+              </div>
+            </div>
+
+            <div class="formrow">
+              <div class="label">Dolgu saydamlığı</div>
+              <div class="row2">
+                <input id="fillOpacity" type="range" min="0" max="1" step="0.05"/>
+                <div class="val" id="fillOpacityVal">0.20</div>
+              </div>
+            </div>
+
+            <div class="formrow">
+              <div class="label">Çizgi kalınlığı</div>
+              <div class="row2">
+                <input id="lineWeight" type="range" min="1" max="10" step="1"/>
+                <div class="val" id="lineWeightVal">2</div>
+              </div>
+            </div>
+
+            <div class="formrow">
+              <div class="label">Çizgi tipi</div>
+              <div class="row2">
+                <select id="lineDash" class="tb-select">
+                  <option value="solid">Solid</option>
+                  <option value="dash">Dash</option>
+                  <option value="dot">Dot</option>
+                  <option value="dashdot">Dash-dot</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-foot">
+            <button id="styleReset" class="btn ghost">Varsayılana Dön</button>
+            <button id="styleApply" class="btn primary">Uygula</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Attribute Table Drawer -->
+      <div id="attrDrawer" class="attr-drawer hidden">
+        <div class="attr-head">
+          <div class="attr-left">
+            <div class="attr-title">Öznitelik Tablosu</div>
+            <div class="attr-sub" id="attrSub">—</div>
+          </div>
+
+          <div class="attr-right">
+            <button id="attrClose" class="xbtn" title="Kapat">×</button>
+          </div>
+        </div>
+
+        <div class="attr-toolbar">
+          <button id="attrGoLayers" class="btn ghost" title="Katmanlar sekmesine git">Katmanlar</button>
+
+          <label class="attr-label">
+            Katman:
+            <select id="attrLayerSelect" class="attr-select"></select>
+          </label>
+
+          <label class="attr-label">
+            Filtre:
+            <input id="attrFilter" class="attr-input" placeholder="Örn: name=Park veya sadece arama..." />
+          </label>
+
+          <button id="attrClearFilter" class="btn ghost">Filtreyi Temizle</button>
+
+          <div class="attr-spacer"></div>
+
+          <button id="attrAddField" class="btn ghost">Yeni Kolon</button>
+          <button id="attrExportCsv" class="btn primary">Excel (CSV) İndir</button>
+        </div>
+
+        <div class="attr-tablewrap">
+          <table class="attr-table" id="attrTable"></table>
+        </div>
+
+        <div class="attr-foot">
+          <div class="attr-foot-left" id="attrCount">0 kayıt</div>
+          <div class="attr-foot-right">
+            <button id="attrZoomSel" class="btn ghost">Seçilene Git</button>
+            <button id="attrClearSel" class="btn ghost">Seçimi Temizle</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- statusbar -->
+      <div class="statusbar" id="statusbar">Hazır</div>
+    </main>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- SHP import için shpjs -->
+  <script src="https://unpkg.com/shpjs@latest/dist/shp.js"></script>
+
+  <!-- App JS -->
+  <script src="./app.js"></script>
+</body>
+</html>
