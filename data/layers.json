@@ -1,0 +1,19 @@
+[
+  {"id":"cami","name":"Cami","group":"Donatı","geom":"polygon","file":"kucukcekmece_donati_cami__kucukcekmece_donati_cami.geojson","color":"#2E8B57"},
+  {"id":"egitim","name":"Eğitim","group":"Donatı","geom":"polygon","file":"kucukcekmece_donati_egitim__kucukcekmece_donati_egitim.geojson","color":"#1E90FF"},
+  {"id":"kamu","name":"Kamu Alanı","group":"Donatı","geom":"polygon","file":"kucukcekmece_donati_kamu_alani__kucukcekmece_donati_kamu_alani.geojson","color":"#6A5ACD"},
+  {"id":"kultur","name":"Kültür","group":"Donatı","geom":"polygon","file":"kucukcekmece_donati_kultur__kucukcekmece_donati_kultur.geojson","color":"#FF8C00"},
+  {"id":"mezarlik","name":"Mezarlık","group":"Donatı","geom":"polygon","file":"kucukcekmece_donati_mezarlik__kucukcekmece_donati_mezarlik.geojson","color":"#8B4513"},
+  {"id":"otopark","name":"Otopark","group":"Donatı","geom":"polygon","file":"kucukcekmece_donati_otopark__kucukcekmece_donati_otopark.geojson","color":"#708090"},
+  {"id":"park","name":"Park","group":"Donatı","geom":"polygon","file":"kucukcekmece_donati_park__kucukcekmece_donati_park.geojson","color":"#1B5E20","fillColor":"#32CD32","fillOpacity":0.35},
+
+  {"id":"saglik","name":"Sağlık","group":"Donatı","geom":"polygon","file":"kucukcekmece_donati_saglik__kucukcekmece_donati_saglik.geojson","color":"#DC143C"},
+  {"id":"sosyal","name":"Sosyal","group":"Donatı","geom":"polygon","file":"kucukcekmece_donati_sosyal__kucukcekmece_donati_sosyal.geojson","color":"#00BFA6"},
+  {"id":"universite","name":"Üniversite","group":"Donatı","geom":"polygon","file":"kucukcekmece_donati_universite__kucukcekmece_donati_universite.geojson","color":"#FF1493"},
+  {"id":"spor","name":"Spor","group":"Donatı","geom":"polygon","file":"kucukcekmece_donati_spor__kucukcekmece_donati_spor.geojson","color":"#7CFC00"},
+
+  {"id":"ilce","name":"İlçe Sınırı","group":"İdari","geom":"polygon","file":"kucukcekmece_ilce_pl__kucukcekmece_ilce_pl.geojson","color":"#111111","fillColor":"#111111","fillOpacity":0.03},
+  {"id":"mahalle","name":"Mahalle Sınırları","group":"İdari","geom":"polygon","file":"kucukcekmece_mahalle_pl__kucukcekmece_mahalle_pl.geojson","color":"#444444","fillColor":"#444444","fillOpacity":0.02},
+  {"id":"yapi","name":"Yapı","group":"İdari","geom":"polygon","file":"kucukcekmece_yapi_pl__kucukcekmece_yapi_pl.geojson","color":"#B8860B","fillColor":"#B8860B","fillOpacity":0.10},
+  {"id":"yol_pl","name":"Yol","group":"Ulaşım","geom":"line","file":"kucukcekmece_yol_pl__kucukcekmece_yol_pl.geojson","color":"#222222","fillColor":"#999999","fillOpacity":0.20}
+]
